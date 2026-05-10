@@ -1,0 +1,12 @@
+index=sysmon EventCode=1
+| where (like(lower(Image), "%\powershell.exe%")
+OR like(lower(Image), "%\cmd.exe%")
+OR like(lower(Image), "%\wscript.exe%")
+OR like(lower(Image), "%\mshta.exe%"))
+AND NOT like(lower(Image), "%splunk%")
+AND NOT like(lower(ParentImage), "%splunk%")
+| eval mitre_technique="T1059 - Command and Scripting Interpreter"
+| eval mitre_tactic="Execution"
+| eval severity=if(like(lower(Image),"%powershell%"),"HIGH","MEDIUM")
+| table _time, ComputerName, User, Image, CommandLine, ParentImage, IntegrityLevel, mitre_technique, mitre_tactic, severity
+| sort -_time

@@ -1,0 +1,14 @@
+index=sysmon EventCode=3
+| where DestinationIp != "127.0.0.1"
+AND DestinationIp != "0.0.0.0"
+AND NOT like(DestinationIp, "192.168.%")
+AND NOT like(DestinationIp, "10.%")
+AND NOT like(DestinationIp, "172.16.%")
+| stats count by DestinationIp, DestinationPort, Image, ComputerName, User
+| where count > 3
+| sort -count
+| eval mitre_technique="T1071 - Application Layer Protocol"
+| eval mitre_tactic="Command and Control"
+| eval severity=if(count>10,"HIGH","MEDIUM")
+| eval description="Repeated outbound connections - possible C2 beaconing"
+| table ComputerName, User, Image, DestinationIp, DestinationPort, count, mitre_technique, mitre_tactic, severity, description

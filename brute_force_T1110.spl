@@ -1,0 +1,9 @@
+index=wineventlog EventCode=4625
+| stats count by Source_Network_Address, Account_Name, host, Failure_Reason
+| where count > 5
+| sort -count
+| eval mitre_technique="T1110 - Brute Force"
+| eval mitre_tactic="Credential Access"
+| eval severity="HIGH"
+| eval description="Multiple failed login attempts detected from same source"
+| table Source_Network_Address, Account_Name, host, count, Failure_Reason, mitre_technique, mitre_tactic, severity, description
