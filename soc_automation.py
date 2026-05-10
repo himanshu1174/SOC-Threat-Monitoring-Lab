@@ -3,15 +3,7 @@ import json
 from jira import JIRA
 from datetime import datetime
 
-# ============================================================
-# SOC THREAT MONITORING & IOC ANALYSIS LAB
-# Automation Script: Splunk Alert → VirusTotal → MITRE → Jira
-# Author: Himanshu Raj Singh
-# GitHub: github.com/himanshu1174
-# ============================================================
 
-# --- CONFIGURATION --- #
-# ⚠️ FILL THESE 2 VALUES FROM YOUR soc-lab-secrets.txt FILE
 JIRA_URL     = "https://hr478867.atlassian.net"
 JIRA_EMAIL   = "hr478867@gmail.com"
 JIRA_TOKEN   = "y JIRA TOKEN"       
@@ -40,9 +32,9 @@ MITRE_MAP = {
     }
 }
 
-# ============================================================
+
 # FUNCTION 1: Check IOC on VirusTotal
-# ============================================================
+
 def check_virustotal(ioc, ioc_type="ip"):
     print(f"\n[*] Checking VirusTotal for {ioc_type}: {ioc}")
     try:
@@ -88,7 +80,7 @@ def check_virustotal(ioc, ioc_type="ip"):
         print(f"    [!] VT check failed: {e} — skipping VT")
         return None
 
-# ============================================================
+
 # FUNCTION 2: Determine Severity
 # ============================================================
 def get_severity(alert_type, vt_data):
